@@ -3,14 +3,16 @@ import React, { Component } from 'react';
 import {
   BrowserRouter,
   Switch,
-  Route
+  Route,
+  Link,
 } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 
-import Homepage from "./Components/Homepage";
-import NotFound from './Components/NotFound';
+import News from './Components/News';
+import NewsOne from './Components/NewsOne';
+import Page from './Components/Page';
 
 import { 
   Navbar, 
@@ -28,14 +30,16 @@ class App extends Component {
   constructor() {
     super();
     this.state = { 
-      data: null,
-      included: null,
+      data: null
     };
-    this.loadNews = this.loadNews.bind(this);
-    this.updateData = this.updateData.bind(this);
   }
   
   render() {
+    
+    const {
+      data
+    } = this.state;
+    
     return (
       <BrowserRouter>
         <div className="App">
@@ -44,14 +48,10 @@ class App extends Component {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="mr-auto">
-                <Nav.Link href="#home">Home</Nav.Link>
-                <Nav.Link href="#link">Link</Nav.Link>
-                <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                <Nav.Link as={Link} to="/">Home</Nav.Link>
+                <Nav.Link as={Link} to="/about-us">About</Nav.Link>
+                <NavDropdown title="What's happening" id="basic-nav-dropdown">
+                  <NavDropdown.Item as={Link} to="/news">News</NavDropdown.Item>
                 </NavDropdown>
               </Nav>
               <Form inline>
@@ -61,8 +61,9 @@ class App extends Component {
             </Navbar.Collapse>
           </Navbar>
           <Switch>
-            <Route path="/" component={Homepage}/>
-            <Route component={NotFound}/>
+            <Route exact path="/news" component={News}/>
+            <Route path="/news" render={(match) => <NewsOne key={match.location.pathname} {...match}/>}/>
+            <Route render={(match) => <Page key={match.location.pathname} {...match}/>}/>
           </Switch>
         </div>
       </BrowserRouter>

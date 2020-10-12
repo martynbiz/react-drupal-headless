@@ -1,11 +1,5 @@
 import React, { Component } from 'react';
 
-// import {
-//   BrowserRouter,
-//   Switch,
-//   Route
-// } from 'react-router-dom';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import NewsList from "./News/NewsList";
@@ -14,7 +8,7 @@ import { Container, Row, Col } from 'react-bootstrap';
   
 const NEWS_LIST_URL = 'http://localhost:8085/jsonapi/node/article?include=field_image';
 
-class Homepage extends Component {
+class News extends Component {
 
   constructor() {
     super();
@@ -68,4 +62,4 @@ class Homepage extends Component {
   }
 }
 
-export default Homepage;
+export default News;

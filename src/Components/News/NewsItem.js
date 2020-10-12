@@ -2,6 +2,10 @@ import React from 'react';
 
 import { Card, Badge, Button } from 'react-bootstrap';
 
+import {
+  Link,
+} from 'react-router-dom';
+
 const SITE_URL = 'http://localhost:8085';
 
 export default class NewsItem extends React.Component {
@@ -25,7 +29,9 @@ export default class NewsItem extends React.Component {
         }
         <Card.Body className="">
           <Card.Title>{attributes.title}</Card.Title>
-          <div dangerouslySetInnerHTML={{__html: attributes.body.value}} />
+          <Button as={Link} to={attributes.path.alias} variant="secondary" size="lg" disabled>
+            Read more
+          </Button>
         </Card.Body>
       </Card>
     );

@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 
-class Page extends Component {
+import { 
+  Container,
+  Row,
+  Col,
+} from 'react-bootstrap';
+
+class NewsOne extends Component {
 
   constructor() {
     super();
@@ -18,9 +24,16 @@ class Page extends Component {
     }
     
     return (
-      <div class="py-5">
+      <div>
         {data && data.attributes.body && 
-          <div dangerouslySetInnerHTML={{__html: data.attributes.body.value}} />}
+          <Container className="py-5">
+            <Row>
+              <Col>
+                <h1>{data.attributes.title}</h1>
+                <div dangerouslySetInnerHTML={{__html: data.attributes.body.value}} />
+              </Col>
+            </Row>
+          </Container>}
       </div>
     );
   }
@@ -60,4 +73,4 @@ class Page extends Component {
   }
 }
 
-export default Page
+export default NewsOne
