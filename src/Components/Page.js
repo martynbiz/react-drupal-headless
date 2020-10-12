@@ -18,7 +18,7 @@ class Page extends Component {
     }
     
     return (
-      <div class="py-5">
+      <div className="py-5">
         {data && data.attributes.body && 
           <div dangerouslySetInnerHTML={{__html: data.attributes.body.value}} />}
       </div>
