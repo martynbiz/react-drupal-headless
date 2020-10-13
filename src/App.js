@@ -7,12 +7,14 @@ import {
   Link,
 } from 'react-router-dom';
 
+import config from 'react-global-configuration';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 
-import News from './Components/News';
-import NewsOne from './Components/NewsOne';
-import Page from './Components/Page';
+import Article from './Components/Article';
+import BasicPage from './Components/BasicPage';
+import RecentArticles from './Components/Views/RecentArticles';
 
 import { 
   Navbar, 
@@ -22,8 +24,10 @@ import {
   NavDropdown,
   Button
 } from 'react-bootstrap';
-  
-const LIST_URL = 'http://localhost:8085/jsonapi/node/article?include=field_image';
+
+config.set({
+  base_url: 'http://localhost:8085' 
+});
 
 class App extends Component {
 
@@ -34,24 +38,19 @@ class App extends Component {
     };
   }
   
-  render() {
-    
-    const {
-      data
-    } = this.state;
-    
+  render() {    
     return (
       <BrowserRouter>
         <div className="App">
           <Navbar className="navbar-dark bg-dark" expand="lg">
-            <Navbar.Brand href="#home">Scottish Centre for Alternative Technology</Navbar.Brand>
+            <Navbar.Brand href="#home">React Drupal Headless</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="mr-auto">
                 <Nav.Link as={Link} to="/">Home</Nav.Link>
                 <Nav.Link as={Link} to="/about-us">About</Nav.Link>
                 <NavDropdown title="What's happening" id="basic-nav-dropdown">
-                  <NavDropdown.Item as={Link} to="/news">News</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/news">Recent articles</NavDropdown.Item>
                 </NavDropdown>
               </Nav>
               <Form inline>
@@ -61,34 +60,13 @@ class App extends Component {
             </Navbar.Collapse>
           </Navbar>
           <Switch>
-            <Route exact path="/news" component={News}/>
-            <Route path="/news" render={(match) => <NewsOne key={match.location.pathname} {...match}/>}/>
-            <Route render={(match) => <Page key={match.location.pathname} {...match}/>}/>
+            <Route exact path="/news" component={RecentArticles}/>
+            <Route path="/news" render={(match) => <Article key={match.location.pathname} {...match}/>}/>
+            <Route render={(match) => <BasicPage key={match.location.pathname} {...match}/>}/>
           </Switch>
         </div>
       </BrowserRouter>
     );
-  }
-
-  loadNews() {
-    // Fetch News.
-    fetch(LIST_URL, {mode:'cors'})
-      .then(function (response) {
-        return response.json();
-      })
-      .then((data) => this.updateData(data))
-      .catch(err => console.log('Fetching News Failed', err));
-  }
-
-  updateData(responseData) {
-    this.setState({
-      data: responseData.data,
-      included: responseData.included
-    });
-  }
-
-  componentWillMount() {
-    this.loadNews();
   }
 }
 

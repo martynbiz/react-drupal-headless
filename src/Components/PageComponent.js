@@ -1,63 +1,60 @@
 import React, { Component } from 'react';
 
-class Page extends Component {
+import config from 'react-global-configuration';
+
+class PageComponent extends Component {
 
   constructor() {
     super();
     this.state = { 
       data: null,
       currentPath: null,
+      isHomePath: false,
     };
   }
   
   render() {
-    const { location } = this.props;
-    const { data, currentPath } = this.state;
-    if (location.pathname !== currentPath) {
-      this.translatePath(location);
-    }
-    
     return (
-      <div className="py-5">
-        {data && data.attributes.body && 
-          <div dangerouslySetInnerHTML={{__html: data.attributes.body.value}} />}
-      </div>
-    );
+        <div>...</div>
+    )
   }
 
   translatePath() {
     const { location } = this.props;
-    fetch('http://localhost:8085/router/translate-path?path=' + location.pathname, {mode:'cors'})
+    const url = config.get('base_url') + '/router/translate-path?path=' + location.pathname;
+    fetch(url, {mode:'cors'})
       .then(function (response) {
         return response.json();
       })
       .then((data) => this.loadContent(data))
       .catch(err => this.setState({
         data: null,
-        currentPath: location.pathname,
+        currentPath: location.pathname
       }));
   }
 
-  loadContent(data) {
+  loadContent(translateData) {
     const { location } = this.props;
-    fetch(data.jsonapi.individual, {mode:'cors'})
+    fetch(translateData.jsonapi.individual, {mode:'cors'})
       .then(function (response) {
         return response.json();
       })
-      .then((data) => this.updateContent(data))
+      .then((jsonapiData) => this.updateContent(jsonapiData, translateData))
       .catch(err => this.setState({
         data: null,
         currentPath: location.pathname,
       }));
   }
 
-  updateContent(responseData) {
+  updateContent(jsonapiData, translateData) {
     const { location } = this.props;
+    console.log(translateData)
     this.setState({
-      data: responseData.data,
+      data: jsonapiData.data,
       currentPath: location.pathname,
+      isHomePath: translateData.isHomePath
     });
   }
 }
 
-export default Page
+export default PageComponent
